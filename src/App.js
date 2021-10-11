@@ -6,6 +6,7 @@ export class App extends Component {
   state = {
     contacts: [],
     name: "",
+    number: "",
   };
 
   handleSubmit = (e) => {
@@ -13,6 +14,7 @@ export class App extends Component {
     const obj = {
       //составляющая контакта - имя и идентификатор
       name: this.state.name,
+      number: this.state.number,
       id: uuidv4(),
     };
     this.setState((prevState) => {
@@ -27,6 +29,7 @@ export class App extends Component {
   handleChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
+      [e.target.number]: e.target.value,
     });
   };
 
@@ -34,11 +37,12 @@ export class App extends Component {
 
   resetForm = () => {
     this.setState({ name: "" });
+    this.setState({ number: "" });
   };
 
   render() {
     console.log(this.state.name);
-    const { name, contacts } = this.state;
+    const { name, number, contacts } = this.state;
     const { handleSubmit, handleChange, contactIdName } = this;
     return (
       <div>
@@ -55,13 +59,28 @@ export class App extends Component {
             onChange={handleChange}
             value={name}
           />
+
+          <label htmlFor={contactIdName}>Number</label>
+          <input
+            id={contactIdName}
+            type="tel"
+            name="number"
+            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+            title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
+            required
+            onChange={handleChange}
+            value={number}
+          />
+
           <button type="submit">Add contact</button>
         </form>
         <div>
           <h2>Contacts</h2>
           <ul>
-            {contacts.map(({ id, name }) => (
-              <li key={id}>{name} </li>
+            {contacts.map(({ id, name, number }) => (
+              <li key={id}>
+                {name}: {number}
+              </li>
             ))}
           </ul>
         </div>
