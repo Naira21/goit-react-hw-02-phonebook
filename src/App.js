@@ -50,6 +50,11 @@ export class App extends Component {
   // resetForm = () => {
   //   this.setState({ name: "", number: "" });
   // };
+  deleteContact = (id) => {
+    this.setState((prevState) => ({
+      contacts: prevState.contacts.filter((contact) => contact.id !== id),
+    }));
+  };
 
   changeFilter = (e) => {
     this.setState({ filter: e.currentTarget.value });
@@ -59,10 +64,11 @@ export class App extends Component {
     const { contacts, filter } = this.state;
     const {
       handleSubmit,
-      contactIdName,
+      // contactIdName,
       //contactIdNumber,
       // handleChange,
       changeFilter,
+      deleteContact,
     } = this;
 
     const filteredContacts = contacts.filter((contact) =>
@@ -103,8 +109,8 @@ export class App extends Component {
           <h1>Phonebook</h1>
           <Form onSubmit={handleSubmit} />
           <h2>Contacts</h2>
-          <Filter id={contactIdName} onChange={changeFilter} value={filter} />
-          <ContactList filtered={filteredContacts} />
+          <Filter onChange={changeFilter} value={filter} />
+          <ContactList filtered={filteredContacts} onDelete={deleteContact} />
         </div>
       </div>
     );
