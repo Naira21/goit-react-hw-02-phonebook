@@ -1,74 +1,78 @@
 import "./App.css";
 import { Component } from "react";
-import { v4 as uuidv4 } from "uuid";
+import contactsData from "./contacts.json";
+
 import Filter from "./components/Filter";
+import ContactList from "./components/ContactList";
+import Form from "./components/Form";
 
 export class App extends Component {
   state = {
-    contacts: [
-      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-      { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-    ],
+    contacts: contactsData,
     filter: "",
-    name: "",
-    number: "",
   };
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const { name, number } = this.state;
-    const obj = {
-      //составляющая контакта - имя и идентификатор
-      name,
-      number,
-      id: uuidv4(),
-    };
+  handleSubmit = (newContact) => {
+    // e.preventDefault();
+    const { contacts } = this.state;
+    // const obj = {
+    //   //составляющая контакта - имя и идентификатор
+    //   name,
+    //   number,
+    //   id: uuidv4(),
+    // };
+    const dupliceteContact = contacts.find(
+      (contact) => contact.name === newContact.name
+    );
+    if (dupliceteContact) {
+      alert(`${newContact.name} is already in contacts`);
+      return;
+    }
 
-    this.setState((prevState) => {
+    this.setState(({ contacts }) => {
       return {
-        contacts: [...prevState.contacts, obj], //добавление в массив введенного значения
+        contacts: [...contacts, newContact], //добавление в массив введенного значения
       };
     });
 
-    this.resetForm();
+    // this.resetForm();
   };
 
-  handleChange = (e) => {
-    const { value, name, number } = e.target;
-    this.setState({
-      [name]: value,
-      [number]: value,
-    });
-  };
+  // handleChange = (e) => {
+  //   const { value, name, number } = e.target;
+  //   this.setState({
+  //     [name]: value,
+  //     [number]: value,
+  //   });
+  // contactIdName = uuidv4();
+  // contactIdNumber = uuidv4();
 
-  contactIdName = uuidv4();
-  contactIdNumber = uuidv4();
+  // resetForm = () => {
+  //   this.setState({ name: "", number: "" });
+  // };
 
-  resetForm = () => {
-    this.setState({ name: "", number: "" });
-  };
   changeFilter = (e) => {
     this.setState({ filter: e.currentTarget.value });
   };
 
   render() {
-    const { name, number, contacts, filter } = this.state;
+    const { contacts, filter } = this.state;
     const {
       handleSubmit,
-      handleChange,
       contactIdName,
-      contactIdNumber,
+      //contactIdNumber,
+      // handleChange,
       changeFilter,
     } = this;
+
     const filteredContacts = contacts.filter((contact) =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
     );
+
     return (
       <div>
-        <form onSubmit={handleSubmit}>
-          <h2>Phonebook</h2>
+        {/* <form onSubmit={handleSubmit}>
+          
           <label htmlFor={contactIdName}>Name</label>
           <input
             id={contactIdName}
@@ -93,18 +97,14 @@ export class App extends Component {
             value={number}
           />
           <button type="submit">Add contact</button>
-        </form>
+        </form> */}
+
         <div>
+          <h1>Phonebook</h1>
+          <Form onSubmit={handleSubmit} />
           <h2>Contacts</h2>
           <Filter id={contactIdName} onChange={changeFilter} value={filter} />
-
-          <ul>
-            {filteredContacts.map(({ id, name, number }) => (
-              <li key={id}>
-                {name}: {number}
-              </li>
-            ))}
-          </ul>
+          <ContactList filtered={filteredContacts} />
         </div>
       </div>
     );
