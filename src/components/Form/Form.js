@@ -1,5 +1,5 @@
 import { Component } from "react";
-
+import s from "./Form.module.css";
 import { v4 as uuidv4 } from "uuid";
 
 class Form extends Component {
@@ -23,12 +23,6 @@ class Form extends Component {
     };
     this.props.onSubmit(obj);
 
-    // this.setState((prevState) => {
-    //   return {
-    //     contacts: [...prevState.contacts, obj], //добавление в массив введенного значения
-    //   };
-    // });
-
     this.resetForm();
   };
   resetForm = () => {
@@ -48,7 +42,9 @@ class Form extends Component {
     const { handleSubmit, handleChange, contactIdName, contactIdNumber } = this;
     return (
       <form onSubmit={handleSubmit}>
-        <label htmlFor={contactIdName}>Name</label>
+        <label htmlFor={contactIdName} className={s.labelText}>
+          Name
+        </label>
         <input
           id={contactIdName}
           type="text"
@@ -60,7 +56,9 @@ class Form extends Component {
           value={name}
         />
 
-        <label htmlFor={contactIdNumber}>Number</label>
+        <label htmlFor={contactIdNumber} className={s.labelText}>
+          Number
+        </label>
         <input
           id={contactIdNumber}
           type="tel"
@@ -71,7 +69,9 @@ class Form extends Component {
           onChange={handleChange}
           value={number}
         />
-        <button type="submit">Add contact</button>
+        <button type="submit" className={s.addBtn}>
+          Add contact
+        </button>
       </form>
     );
   }

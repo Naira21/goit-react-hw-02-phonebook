@@ -1,4 +1,4 @@
-import "./App.css";
+import s from "./App.module.css";
 import { Component } from "react";
 import contactsData from "./contacts.json";
 
@@ -13,18 +13,12 @@ export class App extends Component {
   };
 
   handleSubmit = (newContact) => {
-    // e.preventDefault();
     const { contacts } = this.state;
-    // const obj = {
-    //   //составляющая контакта - имя и идентификатор
-    //   name,
-    //   number,
-    //   id: uuidv4(),
-    // };
-    const dupliceteContact = contacts.find(
+
+    const duplicateContact = contacts.find(
       (contact) => contact.name === newContact.name
     );
-    if (dupliceteContact) {
+    if (duplicateContact) {
       alert(`${newContact.name} is already in contacts`);
       return;
     }
@@ -34,22 +28,8 @@ export class App extends Component {
         contacts: [...contacts, newContact], //добавление в массив введенного значения
       };
     });
-
-    // this.resetForm();
   };
 
-  // handleChange = (e) => {
-  //   const { value, name, number } = e.target;
-  //   this.setState({
-  //     [name]: value,
-  //     [number]: value,
-  //   });
-  // contactIdName = uuidv4();
-  // contactIdNumber = uuidv4();
-
-  // resetForm = () => {
-  //   this.setState({ name: "", number: "" });
-  // };
   deleteContact = (id) => {
     this.setState((prevState) => ({
       contacts: prevState.contacts.filter((contact) => contact.id !== id),
@@ -62,91 +42,25 @@ export class App extends Component {
 
   render() {
     const { contacts, filter } = this.state;
-    const {
-      handleSubmit,
-      // contactIdName,
-      //contactIdNumber,
-      // handleChange,
-      changeFilter,
-      deleteContact,
-    } = this;
+    const { handleSubmit, changeFilter, deleteContact } = this;
 
     const filteredContacts = contacts.filter((contact) =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
     );
 
     return (
-      <div>
-        {/* <form onSubmit={handleSubmit}>
-          
-          <label htmlFor={contactIdName}>Name</label>
-          <input
-            id={contactIdName}
-            type="text"
-            name="name"
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
-            required
-            onChange={handleChange}
-            value={name}
-          />
-
-          <label htmlFor={contactIdNumber}>Number</label>
-          <input
-            id={contactIdNumber}
-            type="tel"
-            name="number"
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
-            required
-            onChange={handleChange}
-            value={number}
-          />
-          <button type="submit">Add contact</button>
-        </form> */}
-
-        <div>
-          <h1>Phonebook</h1>
-          <Form onSubmit={handleSubmit} />
-          <h2>Contacts</h2>
-          <Filter onChange={changeFilter} value={filter} />
-          <ContactList filtered={filteredContacts} onDelete={deleteContact} />
-        </div>
+      <div className={s.wrapper}>
+        <h1 className={s.pageTitle}>Phonebook</h1>
+        <Form onSubmit={handleSubmit} />
+        <h2>Contacts</h2>
+        <Filter onChange={changeFilter} value={filter} />
+        <ContactList
+          contacts={filteredContacts}
+          onDeleteContact={deleteContact}
+        />
       </div>
     );
   }
 }
 
 export default App;
-
-//obj.map(({id, name})=>(<li key={id}>{item.name} <button
-//           type="button"
-//           className="TodoList__btn"
-//           onClick={() => onDeleteTodo(id)}
-//         >
-//           Удалить
-//         </button>
-//          </li >)))
-
-//  {todos.map(({ id, text, completed }) => (
-//       <li
-//         key={id}
-//         className={classNames('TodoList__item', {
-//           'TodoList__item--completed': completed,
-//         })}
-//       >
-//         <input
-//           type="checkbox"
-//           checked={completed}
-//           onChange={() => onToggleCompleted(id)}
-//         />
-//         <p className="TodoList__text">{text}</p>
-//         <button
-//           type="button"
-//           className="TodoList__btn"
-//           onClick={() => onDeleteTodo(id)}
-//         >
-//           Удалить
-//         </button>
-//       </li>
-//     ))}
